@@ -33,6 +33,9 @@ router.get('/search/:rName/:rEmail', (req, res) => {
 //if req.body.user is not defined error handlers deal with it (found in /utils/middleware.js)
 router.post('/', (req, res, next) => {
     const newUser = req.body.user
+    if (!(newUser.name && newUser.email)) {
+        return res.status(400).send({'error': 'invalid user data'})
+    }
     db.set(crypto.randomUUID(), {name: newUser.name, email: newUser.email})
     res.status(200).json({
         name: newUser.name, email: newUser.email

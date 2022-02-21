@@ -10,10 +10,7 @@ const requestLogger = morgan(':date - :method :url :status :res[content-length] 
 const newUserError = (error, req, res, next) => {
     const user = req.body.user
     if (!user) {
-        return res.status(400).send({'error': 'invalid user data'})
-    }
-    if (!(user.name && user.email)) {
-        return res.status(400).send({'error': 'invalid user data'})
+        return res.status(400).send({'error': 'user data missing'})
     }
     next(error)
 }
@@ -27,6 +24,7 @@ const unknownEndpoint = (req, res) => {
 }
 
 const errorHandler = (error, req, res, next) => {
+    console.log(error)
     if (req.url === '/users' && req.method === 'POST') {
         return newUserError(error, req, res, next)
     }
